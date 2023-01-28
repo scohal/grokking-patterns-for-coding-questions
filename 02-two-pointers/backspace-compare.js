@@ -69,19 +69,48 @@ const nextValidChar = (p, str) => {
   return p;
 }
 
+console.log('LOOP SOLUTION TESTS:')
+console.log(backspaceCompare('', 'a#')); // true
 console.log(backspaceCompare('abcdab#c##d', 'abcdd')); // true
+console.log(backspaceCompare('a#bc#defg##h##ijkl#', 'bdijk')); // true
 console.log(backspaceCompare('xy#z', 'xzz#')); // true
-console.log(backspaceCompare('xy#z', 'xyz#')); // false
 console.log(backspaceCompare('xp#', 'xyz##')); // true
 console.log(backspaceCompare('xywrrmp', 'xywrrmu#p')); // true
+console.log(backspaceCompare('xy#z', 'xyz#')); // false
+console.log(backspaceCompare('a#bc#defg##h##ijkl#', 'abdijk')); // false
 
 /*** RECURSIVE SOLUTION ***/
 
 const backspaceCompare2 = (str1, str2) => {
+  str1 = applyBackspaces(str1);
+  str2 = applyBackspaces(str2);
 
+  if (str1.length === 0 && str2.length === 0) return true; // reached end of both strings
+  if (str1.length === 0 || str2.length === 0) return false; // reached end of one string
+  if (str1[str1.length - 1] !== str2[str2.length - 1]) return false; // characters not equal
 
+  return backspaceCompare (str1.slice(0, str1.length - 1), str2.slice(0, str2.length - 1));
 }
 
+const applyBackspaces = (str, backspaceCount = 0) => {
+  if (str.length === 0 ||
+     (str[str.length - 1] !== '#' && backspaceCount === 0)) {
+    return str;
+  }
 
+  if (str[str.length - 1] === '#') {
+    return applyBackspaces(str.slice(0, str.length - 1), backspaceCount + 1);
+  }
 
+  return applyBackspaces(str.slice(0, str.length - 1), backspaceCount - 1);
+}
 
+console.log('RECURSIVE SOLUTION TESTS:')
+console.log(backspaceCompare2('', 'a#')); // true
+console.log(backspaceCompare2('abcdab#c##d', 'abcdd')); // true
+console.log(backspaceCompare2('a#bc#defg##h##ijkl#', 'bdijk')); // true
+console.log(backspaceCompare2('xy#z', 'xzz#')); // true
+console.log(backspaceCompare2('xp#', 'xyz##')); // true
+console.log(backspaceCompare2('xywrrmp', 'xywrrmu#p')); // true
+console.log(backspaceCompare2('xy#z', 'xyz#')); // false
+console.log(backspaceCompare2('a#bc#defg##h##ijkl#', 'abdijk')); // false
