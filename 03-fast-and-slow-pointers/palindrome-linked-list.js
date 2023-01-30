@@ -24,7 +24,6 @@ Solution:
    it is palindromic.
 */
 
-
 /***
 Reversing a linked list....
 
@@ -56,10 +55,9 @@ null <-- [1] <-- [2]     [3] --> [4] --> null
 
              ...and so on...
 
-----------------------------------------------
+---------------------------------------------- at the end, reassign head... head = prev;
                                  prev    head
 null <-- [1] <-- [2] <-- [3] <-- [4]     null
-
 */
 
 const reverse = (head) => {
@@ -73,15 +71,45 @@ const reverse = (head) => {
   }
   head = prev;
   return head;
-}
+};
 
+const isPalindrome = (ll) => {
+  // find middle node
+  let slow = ll.head;
+  let fast = ll.head;
+  while (fast !== null && fast.next !== null) {
+    slow = slow.next;
+    fast = fast.next.next;
+  }
+  const middlenode = slow;
 
+  // reverse the list
+
+};
+
+/*** Reverse a Linked List ***/
 const llEven = arrToLinkedList([1, 2, 3, 4, 5, 6]);
-llEven.log();
+// llEven.log();
 const llEvenReverse = new LinkedList(reverse(llEven.head));
-llEvenReverse.log();
+// llEvenReverse.log();
 
-llSingle = arrToLinkedList([1]);
-llSingle.log();
+const llSingle = arrToLinkedList([1]);
+// llSingle.log();
 const llSingleReverse = new LinkedList(reverse(llSingle.head));
-llSingleReverse.log();
+// llSingleReverse.log();
+
+/*** Check if a Linked List is a palindrome ***/
+const palindromes = [
+  arrToLinkedList([1, 2, 3, 4, 5, 4, 3, 2, 1]),
+  arrToLinkedList([1, 2, 3, 4, 4, 3, 2, 1]),
+  arrToLinkedList([1, 1])
+];
+
+const notPalindromes = [
+  arrToLinkedList([1, 2, 3, 2]),
+  arrToLinkedList([1, 2, 3, 4, 4, 3, 2, 1, 1]),
+  arrToLinkedList([1])
+]
+
+palindromes.forEach(e => console.log(isPalindrome(e))); // true, true, true
+// notPalindromes.forEach(e => console.log(isPalindrome(e))); // false, false, ?
