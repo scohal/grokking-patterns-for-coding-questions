@@ -1,3 +1,5 @@
+const {ListNode, LinkedList, arrToLinkedList} = require('./linked-list');
+
 /***
 Given the head of a Singly LinkedList, write a function
 to determine if the LinkedList has a cycle in it or not.
@@ -12,22 +14,6 @@ LL without cycle:
 head
 [ 1 ] --> [ 2 ] --> [ 3 ] --> [ 4 ] --> [ 5 ] --> [ 6 ] --> null
 */
-
-const {ListNode, LinkedList, arrToLinkedList} = require('./linked-list');
-
-// Create a non-cycled and cycled linked lists...
-const values = [1, 2, 3, 4, 5, 6, 7];
-// linked list with no cycle
-const llSimple = arrToLinkedList(values);
-// linked list with no cycle and a single node
-const llSingleSimple = arrToLinkedList(['a']);
-
-// linked list with a cycle
-const llCycled = arrToLinkedList(values.map(e => e * 2));
-llCycled.getLast().next = llCycled.getNode(3);
-// linked list with a single node and a cycle
-const llSingleCycle = arrToLinkedList(['a']);
-llSingleCycle.head.next = llSingleCycle.head;
 
 // SOLUTION 1
 const hasCycle = (ll) => {
@@ -55,6 +41,19 @@ const hasCycle2 = (ll) => {
   }
   return false;
 };
+
+// Create a non-cycled and cycled linked lists...
+const values = [1, 2, 3, 4, 5, 6, 7];
+// linked list with no cycle
+const llSimple = arrToLinkedList(values);
+// linked list with no cycle and a single node
+const llSingleSimple = arrToLinkedList(['a']);
+// linked list with a cycle
+const llCycled = arrToLinkedList(values.map(e => e * 2));
+llCycled.getLast().next = llCycled.getNode(3);
+// linked list with a single node and a cycle
+const llSingleCycle = arrToLinkedList(['a']);
+llSingleCycle.head.next = llSingleCycle.head;
 
 console.log('Does llSimple have a cycle? ' + hasCycle2(llSimple));
 console.log('Does llSingleSimple have a cycle? ' + hasCycle2(llSingleSimple));
