@@ -1,3 +1,5 @@
+const {ListNode, LinkedList, arrToLinkedList} = require('./linked-list');
+
 /***
 Given the head of a Singly LinkedList, write a method to return the middle node of the LinkedList.
 
@@ -10,8 +12,6 @@ Instead, we can use fast + slow pointers. The fast pointer will travel twice as 
 Therefore, when the fast pointer reaches the end of the list, the slow pointer will be at the
 halfway node.
 */
-
-const {ListNode, LinkedList, arrToLinkedList} = require('./linked-list');
 
 const middleNode = (ll) => {
   let slow = ll.head;
