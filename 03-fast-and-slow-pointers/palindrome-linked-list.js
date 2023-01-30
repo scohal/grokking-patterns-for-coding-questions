@@ -62,6 +62,7 @@ null <-- [1] <-- [2] <-- [3] <-- [4]     null
 
 const reverse = (head) => {
   let prev = null;
+  let next = null;
   while(head !== null) {
     next = head.next;
     head.next = prev;
