@@ -46,10 +46,10 @@ const arrToLinkedList = (arr) => {
     node = node.next;
   });
   return ll;
-}
+};
 
 module.exports = {
   ListNode,
   LinkedList,
   arrToLinkedList
-}
+};

@@ -13,7 +13,7 @@ head
 [ 1 ] --> [ 2 ] --> [ 3 ] --> [ 4 ] --> [ 5 ] --> [ 6 ] --> null
 */
 
-const {ListNode, LinkedList, arrToLinkedList} = require('./linked-list.js');
+const {ListNode, LinkedList, arrToLinkedList} = require('./linked-list');
 
 // Create a non-cycled and cycled linked lists...
 const values = [1, 2, 3, 4, 5, 6, 7];
@@ -41,7 +41,7 @@ const hasCycle = (ll) => {
     if (fast === slow) return true; // fast pointer caught up to slow pointer
   }
   return false;
-}
+};
 
 // SOLUTION 2
 const hasCycle2 = (ll) => {
@@ -54,7 +54,7 @@ const hasCycle2 = (ll) => {
     if (fast === slow) return true; // found the cycle
   }
   return false;
-}
+};
 
 console.log('Does llSimple have a cycle? ' + hasCycle2(llSimple));
 console.log('Does llSingleSimple have a cycle? ' + hasCycle2(llSingleSimple));
