@@ -62,29 +62,46 @@ null <-- [1] <-- [2] <-- [3] <-- [4]     null
 
 const reverse = (head) => {
   let prev = null;
-
   while(head !== null) {
     next = head.next;
-    head.next = prev; // update head's link to the next node
+    head.next = prev;
     prev = head;
     head = next;
   }
-  head = prev;
-  return head;
+  return prev;
 };
 
 const isPalindrome = (ll) => {
   // find middle node
-  let slow = ll.head;
-  let fast = ll.head;
+  let head = ll.head;
+  let slow = head;
+  let fast = head;
   while (fast !== null && fast.next !== null) {
     slow = slow.next;
     fast = fast.next.next;
   }
-  const middlenode = slow;
+  // after the while loop, slow is the middle node
 
-  // reverse the list
+  // reverse the second half
+  let headSecondHalf = reverse(slow);
 
+  // additional pointer so we can revert the linked list to the original state
+  const copyHeadSecondHalf = headSecondHalf;
+
+  // check if we have a palindrome
+  let allValuesMatch = true;
+  while(head !== null && headSecondHalf !== null) {
+    if (head.value !== headSecondHalf.value) {
+      allValuesMatch = false;
+      break;
+    }
+    head = head.next;
+    headSecondHalf = headSecondHalf.next;
+  }
+
+  reverse(copyHeadSecondHalf); // revert second half
+
+  return allValuesMatch;
 };
 
 /*** Reverse a Linked List ***/
@@ -98,18 +115,38 @@ const llSingle = arrToLinkedList([1]);
 const llSingleReverse = new LinkedList(reverse(llSingle.head));
 // llSingleReverse.log();
 
+/*** Reverse and revert a Linked List ***/
+let head = new ListNode('a');
+head.next = new ListNode('b');
+head.next.next = new ListNode('c');
+head.next.next.next = new ListNode('d');
+head.next.next.next.next = new ListNode('e');
+head.log(); // [a] -> [b] -> [c] -> [d] -> [e] -> null
+head = reverse(head);
+head.log(); // [e] -> [d] -> [c] -> [b] -> [a] -> null
+head = reverse(head);
+head.log(); // [a] -> [b] -> [c] -> [d] -> [e] -> null
+
+let newHead = reverse(head.next.next);
+head.log();    // [a] -> [b] -> [c] -> null
+newHead.log(); // [e] -> [d] -> [c] -> null
+newHead = reverse(newHead);
+console.log(newHead.value); // 'c'
+head.log(); // [a] -> [b] -> [c] -> [d] -> [e] -> null
+
 /*** Check if a Linked List is a palindrome ***/
 const palindromes = [
   arrToLinkedList([1, 2, 3, 4, 5, 4, 3, 2, 1]),
   arrToLinkedList([1, 2, 3, 4, 4, 3, 2, 1]),
-  arrToLinkedList([1, 1])
+  arrToLinkedList([1, 1]),
+  arrToLinkedList([1])
 ];
 
 const notPalindromes = [
   arrToLinkedList([1, 2, 3, 2]),
   arrToLinkedList([1, 2, 3, 4, 4, 3, 2, 1, 1]),
-  arrToLinkedList([1])
+  arrToLinkedList([1, 0])
 ]
 
-palindromes.forEach(e => console.log(isPalindrome(e))); // true, true, true
-// notPalindromes.forEach(e => console.log(isPalindrome(e))); // false, false, ?
+palindromes.forEach(e => console.log(isPalindrome(e))); // true, true, true, true
+notPalindromes.forEach(e => console.log(isPalindrome(e))); // false, false, false
