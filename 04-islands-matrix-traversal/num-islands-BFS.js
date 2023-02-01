@@ -60,3 +60,59 @@ console.log(countIslands_BFS([
   [0, 1, 1, 0, 0],
   [0, 0, 0, 0, 0]
 ])); // 1
+
+/**
+ * Another BFS solution using a boolean matrix to track visited cells.
+ */
+
+const countIslands_BFS_2 = (arr) => {
+  const visited = arr.map(subarray => subarray.map(e => false));
+  let count = 0;
+
+  for (let r = 0; r < arr.length; r++) {
+    for (let c = 0; c < arr[0].length; c++) {
+      if (arr[r][c] === 1 && visited[r][c] === false) {
+        count += 1;
+        clearIsland_BFS_2(r, c, arr, visited);
+      }
+    }
+  }
+  return count;
+};
+
+const clearIsland_BFS_2 = (r, c, arr, visited) => {
+  const spacesToVisit = [[r, c]];
+
+  while (spacesToVisit.length > 0) {
+    // console.log(spacesToVisit);
+    const [row, col] = spacesToVisit.shift();
+
+    if (row < 0 || row >= arr.length || col < 0 || col >= arr[0].length)
+      continue;
+    if (arr[row][col] === 0 || visited[row][col])
+      continue;
+
+    visited[row][col] = true; // mark visited space
+
+    spacesToVisit.push([row - 1, col]);
+    spacesToVisit.push([row + 1, col]);
+    spacesToVisit.push([row, col - 1]);
+    spacesToVisit.push([row, col + 1]);
+  }
+};
+
+console.log(countIslands_BFS_2([
+  [1, 1, 1, 0, 0],
+  [0, 1, 0, 0, 1],
+  [0, 0, 1, 1, 0],
+  [0, 0, 1, 0, 0],
+  [0, 0, 1, 0, 0]
+])); // 3
+
+console.log(countIslands_BFS_2([
+  [0, 1, 1, 1, 0],
+  [0, 0, 0, 1, 1],
+  [0, 1, 1, 1, 0],
+  [0, 1, 1, 0, 0],
+  [0, 0, 0, 0, 0]
+])); // 1
