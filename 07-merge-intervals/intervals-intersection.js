@@ -9,7 +9,6 @@ const intervalsIntersection = (arr1, arr2) => {
   let p1 = 0;
 
   for (let p2 = 0; p2 < arr2.length; p2++) {
-    console.log("--------");
     let [start1, end1] = arr1[p1] || [null, null];
     const [start2, end2] = arr2[p2];
 
@@ -21,7 +20,6 @@ const intervalsIntersection = (arr1, arr2) => {
 
     // Add all intersecting intervals to the array
     while (p1 < arr1.length && start2 <= end1 && start1 <= end2) {
-      console.log({ start1, end1, start2, end2 });
       intersections.push([Math.max(start1, start2), Math.min(end1, end2)]);
       p1++;
       [start1, end1] = arr1[p1] || [null, null];
@@ -36,7 +34,7 @@ const intervalsIntersection = (arr1, arr2) => {
   return intersections;
 };
 
-// console.log(intervalsIntersection([[1, 3]], [[3, 5]]));
+console.log(intervalsIntersection([[1, 3]], [[3, 5]])); // [[3, 3]]
 
 console.log(
   intervalsIntersection(
@@ -52,17 +50,17 @@ console.log(
   )
 ); // [[2, 3], [5, 6], [7, 7]]
 
-// console.log(
-//   intervalsIntersection(
-//     [
-//       [1, 3],
-//       [5, 7],
-//       [9, 12],
-//       [15, 20],
-//     ],
-//     [
-//       [6, 18],
-//       [19, 20],
-//     ]
-//   )
-// );
+console.log(
+  intervalsIntersection(
+    [
+      [1, 3],
+      [5, 7],
+      [9, 12],
+      [15, 20],
+    ],
+    [
+      [6, 18],
+      [19, 20],
+    ]
+  )
+); // [[6, 7], [9, 12], [15, 19], [19, 20]]
