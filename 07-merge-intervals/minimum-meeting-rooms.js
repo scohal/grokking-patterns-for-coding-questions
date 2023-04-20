@@ -26,7 +26,7 @@ const minimumMeetingRooms = (arr) => {
       // count the overlap
       numOverlaps++;
 
-      // iterate to the next interval, check if it also overlaps with the current overlap
+      // go to the next interval so we can check if it overlaps with the currentOverlap
       j++;
       intervalB = arr[j];
     }

@@ -24,27 +24,29 @@
 //             low            high
 
 const dutchNationalFlag = (arr) => {
-  // create low and high pointers
-  let low = 0;                // put 0's before low
-  let high = arr.length - 1;  // put 2's after high
-
-  // create an 'i' pointer that will iterate between low and high
+  // pointers
+  let low = 0; // where we need to place the next 0
+  let high = arr.length - 1; // where we need to place the next 2
   let i = 0;
 
-  // iterate i from 0, up to and including high
   while (i <= high) {
+    // console.log({arr})
     if (arr[i] === 0) {
-      [arr[low], arr[i]] = [arr[i], arr[low]]; // swap
+      // swap with `low`
+      [arr[low], arr[i]] = [arr[i], arr[low]];
       low++;
       i++;
-    } else if (arr[i] === 2) {
-      [arr[high], arr[i]] = [arr[i], arr[high]]; // swap
-      high--;
-    } else { // arr[i] is 1
+    } else if (arr[1] === 1) {
       i++;
+    } else if (arr[i] === 2) {
+      // swap with `hi`
+      [arr[high], arr[i]] = [arr[i], arr[high]];
+      high--;
+      // don't increment i, in case we swapped a 2 with a 2
     }
   }
 
+  return arr;
 }
 
 const arr1 = [1, 0, 2, 1, 0];

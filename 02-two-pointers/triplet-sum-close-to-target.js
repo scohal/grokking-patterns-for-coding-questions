@@ -7,74 +7,49 @@
  * of the triplet with the smallest sum.
  */
 
-// Method:
-// 1) sort a copy of the input array
-
-// 2) create a variable to store the smallest_distance (between the sum and the target),
-//    and a variable to store the corresponding triplet, closest_triplet
-
-// 3) pointers:
-    // x --> starts at 0
-    // y --> starts at x + 1
-    // z --> starts at last index
-
-// 4) iterate x from 0 to (and incl.) the 3rd from last element
-    // assign y and z to their places
-    // while (y < z)
-      // if the sum of arr[x], arr[y], and arr[z] is zero, return 0 and log the triplet
-
-      // if the current distance is better than the smallest_distance,
-        // update the smallest_distance
-        // upate the closest_triplet
-
-      // if the sum is higher than the target, decrement z
-      // if the sum if lower than the target, increment y
-
-// 5) return the sum of closest_triplet and log the closest_triplet
-
 const tripletSumClosetoTarget = (arr, target) => {
+  // sort the array in non-decreasing order
+  arr.sort((a, b) => a - b);
 
-  const copy = [...arr].sort();
+  // track the closest triplet and closest distance
+  let closestTripletSum = Number.MAX_VALUE;
+  let closestDistance = Number.MAX_VALUE;
 
-  let smallestDistance = Infinity;
-  let closestTriplet = [Infinity, Infinity, Infinity];
-  let closestTripletSum = Infinity;
-
-  for (let x = 0; x < copy.length - 2; x++) {
+  // use the 3 pointer method to find a triplet
+  for (let x = 0; x < arr.length - 2; x++) {
     let y = x + 1;
-    let z = copy.length - 1;
+    let z = arr.length - 1;
 
-    while(y < z) {
-      const sum = copy[x] + copy[y] + copy[z];
-      if (sum === target) {
-        console.log(`Found a sum that equals target!\nTriplet is ${[copy[x], copy[y], copy[z]]} and sum is ${target}.`);
-        return sum;
+    while (y < z) {
+      const sum = arr[x] + arr[y] + arr[z];
+      const distance = Math.abs(sum - target);
+  
+      if (distance < closestDistance) {
+        closestTripletSum = sum;
+        closestDistance = distance;
       }
-
-      const currentDistance = Math.abs(target - sum);
-      if (currentDistance < smallestDistance ||
-         (currentDistance === smallestDistance && sum < closestTripletSum)) {
-        smallestDistance = currentDistance;
-        closestTriplet = [copy[x], copy[y], copy[z]];
-        closestTripletSum = copy[x] + copy[y] + copy[z];
+      // in a tie for closest distance, triplet with smaller sum wins
+      if (distance === closestDistance && sum < closestTripletSum) {
+        closestTripletSum = sum;
       }
-
-      if (sum > target) { // need a lower sum
-        z--;
-      } else { // need a higher sum
-        y++;
-      }
+  
+      if (sum < target) y++;
+      else z--;
     }
+    
   }
 
-  const closestSum = closestTriplet.reduce((sum, e) => sum + e, 0)
-  console.log(`The closest sum found was ${closestSum}.
-    Triplet is ${closestTriplet}`);
-  return closestSum;
-}
-
+  return closestTripletSum;
+};
 
 console.log(tripletSumClosetoTarget([-2, 0, 1, 2], 2)); // The closest sum found was 1. Triplet is [-2, 1, 2].
-console.log(tripletSumClosetoTarget([-3,  -1, 1, 2], 1)); // The closest sum found was 0. Triplet is [-3, 1, 2].
-console.log(tripletSumClosetoTarget([-3,  -1, 1, 2], 2)); // Found a sum that equals target. Triplet is [-1, 1, 2] and sum is 2.
+console.log(tripletSumClosetoTarget([-3, -1, 1, 2], 1)); // The closest sum found was 0. Triplet is [-3, 1, 2].
+console.log(tripletSumClosetoTarget([-3, -1, 1, 2], 2)); // Found a sum that equals target. Triplet is [-1, 1, 2] and sum is 2.
 console.log(tripletSumClosetoTarget([-1, -1, 1, 1], 0)); // // The closest sum found was -1. Triplet is [-1, -1, 1].
+
+// edge case: two triplets with equal distance
+console.log(tripletSumClosetoTarget([0, 0, 1, 1, 2, 6], 5))
+
+// There are two triplets with distance '1' from target: [1, 1, 2] & [0,0, 6].
+// Between these two triplets, the correct answer will be [1, 1, 2] as it has
+// a sum '4' which is less than the sum of the other triplet which is '6'.

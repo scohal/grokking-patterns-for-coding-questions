@@ -29,11 +29,11 @@ const tripletSumToZero = (arr) => {
     let z = copy.length - 1;
 
     while (y < z) {
-      console.log({x, y, z});
+      // console.log({x, y, z});
       const sum = copy[x] + copy[y] + copy[z];
-      console.log('sum is ... ', sum)
+      // console.log('sum is ... ', sum)
       if (sum === 0) {
-        console.log('sum found ', [copy[x], copy[y], copy[z]]);
+        // console.log('sum found ', [copy[x], copy[y], copy[z]]);
         result.push([copy[x], copy[y], copy[z]]);
         z--;
         while (y < z && copy[z] === copy[z + 1]) z--; // skip duplicates
@@ -57,6 +57,6 @@ const tripletSumToZero = (arr) => {
 
 
 console.log(tripletSumToZero([-5, 2, -1, -2, 3])); // [ [-5, 2, 3], [-2, -1, 3] ]
-console.log(tripletSumToZero([1, 2, 3])); // [ [1, 2, 3] ]
+console.log(tripletSumToZero([1, 2, 3])); // []
 console.log(tripletSumToZero([-2, -2, -2, -1, -1, -1, 3, 3, 3, -5, -5, -5, 5, 5, 5, 2, 2, 2, 1, 4]));
 // [ [-5, 1, 4], [-5, 2, 3], [-2, -2, 4], [-2, -1, 3], [-1, -1, 2] ]

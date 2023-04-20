@@ -12,21 +12,21 @@
  */
 
 const floodFill = (arr, cell, newColor, originalColor) => {
-  const [row, col] = cell;
-  if (row < 0 || row >= arr.length || col < 0 || col >= arr[0].length) {
-    return; // out of bounds
-  }
-  if (originalColor === undefined) originalColor = arr[row][col];
-  if (arr[row][col] !== originalColor) {
-    return; // space is not the original color
-  }
+  const [r, c] = cell;
 
-  arr[row][col] = newColor; // fill the space
+  if (originalColor == undefined) originalColor = arr[r][c];
 
-  floodFill(arr, [row - 1, col], newColor, originalColor);
-  floodFill(arr, [row + 1, col], newColor, originalColor);
-  floodFill(arr, [row, col - 1], newColor, originalColor);
-  floodFill(arr, [row, col + 1], newColor, originalColor);
+  if (arr?.[r]?.[c] === undefined) return; // out of bounds
+  if (arr[r][c] !== originalColor) return;
+
+  // paint new color
+  arr[r][c] = newColor;
+
+  // check neighboring cells
+  floodFill(arr, [r - 1, c], newColor, originalColor);
+  floodFill(arr, [r + 1, c], newColor, originalColor);
+  floodFill(arr, [r, c - 1], newColor, originalColor);
+  floodFill(arr, [r, c + 1], newColor, originalColor);
 
   return arr;
 };

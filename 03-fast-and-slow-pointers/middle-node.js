@@ -25,6 +25,8 @@ const middleNode = (ll) => {
   return slow;
 };
 
+
+
 const llEven = arrToLinkedList([1, 2, 3, 4, 5, 6]);
 const llOdd = arrToLinkedList([1, 2, 3, 4, 5, 6, 7]);
 console.log(middleNode(llEven).value); // 4

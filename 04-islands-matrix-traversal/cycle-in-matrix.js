@@ -40,47 +40,103 @@
  * -  we are visiting a cell that has already been visited
  */
 
-const cycleInMatrix = arr => {
+// const cycleInMatrix = arr => {
+//   const visited = arr.map(subarr => subarr.map(e => false));
+//   for (let r = 0; r < arr.length; r++) {
+//     for (let c = 0; c < arr[0].length; c++) {
+//       if (!visited[r][c]) {
+//         if (checkCycle(arr[r][c], arr, visited, r, c, -1, -1)) return true;
+//       }
+//     }
+//   }
+//   return false;
+// };
+
+// const checkCycle = (startChar, arr, visited, r, c, prevR, prevC) => {
+//   if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length) {
+//     return false;
+//   }
+//   if (arr[r][c] !== startChar) {
+//     return false; // not the same character; not a valid space
+//   }
+
+//   if (visited[r][c]) return true; // found a cycle
+
+//   visited[r][c] = true; // visit this cell
+
+//   // only initiate a DFS call to a cell that is not the parent cell
+//   // the nested if statements can also be written on a single line
+//   if (r - 1 !== prevR) {
+//     if (checkCycle(startChar, arr, visited, r - 1, c, r, c)) return true;
+//   }
+//   if (r + 1 !== prevR) {
+//     if (checkCycle(startChar, arr, visited, r + 1, c, r, c)) return true;
+//   }
+//   if (c - 1 !== prevC) {
+//     if (checkCycle(startChar, arr, visited, r, c - 1, r, c)) return true;
+//   }
+//   if (c + 1 !== prevC) {
+//     if (checkCycle(startChar, arr, visited, r, c + 1, r, c)) return true;
+//   }
+
+//   return false; // never encountered a visited cell
+// };
+
+const cycleInMatrix = (arr) => {
   const visited = arr.map(subarr => subarr.map(e => false));
+  
   for (let r = 0; r < arr.length; r++) {
     for (let c = 0; c < arr[0].length; c++) {
       if (!visited[r][c]) {
-        if (checkCycle(arr[r][c], arr, visited, r, c, -1, -1)) return true;
+        if (hasCycle(arr, visited, arr[r][c], [r, c], [r, c])) {
+          // console.log(`Cycle found at start coordinate ${[r, c]}`)
+          return true;
+        }
       }
     }
   }
+
   return false;
 };
 
-const checkCycle = (startChar, arr, visited, r, c, prevR, prevC) => {
-  if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length) {
-    return false;
-  }
-  if (arr[r][c] !== startChar) {
-    return false; // not the same character; not a valid space
-  }
+const hasCycle = (arr, visited, char, curr, prev = [-1, -1]) => {
+  // We have a cycle if:
+  // 1) We traverse to the same cell we started at
+  // 2) We never traverse back to the cell we just came from
 
-  if (visited[r][c]) return true; // found a cycle
+  const [r, c] = curr;
+  if (arr?.[r]?.[c] === undefined) return false; // out of bounds
+  if (arr[r][c] !== char) return false; // different character
+  if (visited[r][c]) return true; // found a cycle!
 
-  visited[r][c] = true; // visit this cell
+  // visit this space
+  visited[r][c] = true;
 
-  // only initiate a DFS call to a cell that is not the parent cell
-  // the nested if statements can also be written on a single line
-  if (r - 1 !== prevR) {
-    if (checkCycle(startChar, arr, visited, r - 1, c, r, c)) return true;
-  }
-  if (r + 1 !== prevR) {
-    if (checkCycle(startChar, arr, visited, r + 1, c, r, c)) return true;
-  }
-  if (c - 1 !== prevC) {
-    if (checkCycle(startChar, arr, visited, r, c - 1, r, c)) return true;
-  }
-  if (c + 1 !== prevC) {
-    if (checkCycle(startChar, arr, visited, r, c + 1, r, c)) return true;
-  }
+  // visit adjacent cells (but NOT the cell we just came from)
+  // example.
+  // We came from [5][4] and are not [4][4]. Do NOT go to [r + 1][c] because r + 1 === prevR
 
-  return false; // never encountered a visited cell
+  const [prevR, prevC] = prev;
+
+  if (r - 1 !== prevR)
+    if (hasCycle(arr, visited, char, [r - 1, c], [r, c])) return true;
+  if (r + 1 !== prevR)
+    if (hasCycle(arr, visited, char, [r + 1, c], [r, c])) return true;
+  if (c - 1 !== prevC) 
+    if (hasCycle(arr, visited, char, [r, c - 1], [r, c])) return true;
+  if (c + 1 !== prevC)
+    if (hasCycle(arr, visited, char, [r, c + 1], [r, c])) return true;
+
+  return false; // never found a cycle
 };
+
+// if a matrix has a cycle, we will eventually end up at the original cell while traversing
+// but we should not re-visit the same cell we just came from - that would give us a false positive
+// 1) traverse the island, store the starting cell (root)
+// 2) as we traverse, clear the cells with a null
+// 3) DO NOT traverse back to a cellt that we just came from
+// 4) If, at any point, we arrive at the starting cell, this island has a cycle!
+
 
 console.log(cycleInMatrix([
   ['a', 'a', 'a', 'a'],

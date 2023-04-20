@@ -5,61 +5,59 @@
  */
 
 const biggestIsland_DFS = (arr) => {
-  let biggest = 0;
+  let biggestIslandArea = 0;
   for (let r = 0; r < arr.length; r++) {
     for (let c = 0; c < arr[0].length; c++) {
       if (arr[r][c] === 1) {
-        const size = visitIsland(r, c, arr);
-        if (size > biggest) biggest = size;
+        biggestIslandArea = Math.max(visitIsland(arr, r, c), biggestIslandArea);
       }
-
     }
   }
-  return biggest;
+  return biggestIslandArea;
 };
 
-const visitIsland = (r, c, arr) => {
-  if (arr[0].length === 6) {
-    console.log({r, c, arr})
-    return;
-  }
-  if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length) {
-    return 0; // out of bounds
-  }
-  if (arr[r][c] === 0) {
-    return 0; // not a land space or already visited
-  }
+const visitIsland = (arr, r, c) => {
+  // is out of bounds or is a water cell
+  if (!arr?.[r]?.[c]) return 0;
 
-  arr[r][c] = 0; // visit this space
+  // clear space
+  arr[r][c] = 0;
 
-  // return the size of the island
-  return 1 + // count this space
-    visitIsland(r - 1, c, arr) +
-    visitIsland(r + 1, c, arr) +
-    visitIsland(r, c - 1, arr) +
-    visitIsland(r, c + 1, arr);
+  return (
+    1 +
+    visitIsland(arr, r - 1, c) +
+    visitIsland(arr, r + 1, c) +
+    visitIsland(arr, r, c - 1) +
+    visitIsland(arr, r, c + 1)
+  );
 };
 
-console.log(biggestIsland_DFS([
-  [1, 1, 1, 0, 0],
-  [0, 1, 0, 0, 1],
-  [0, 0, 1, 1, 0],
-  [0, 1, 1, 0, 0],
-  [0, 0, 1, 0, 0]
-])); // 5
+console.log(
+  biggestIsland_DFS([
+    [1, 1, 1, 0, 0],
+    [0, 1, 0, 0, 1],
+    [0, 0, 1, 1, 0],
+    [0, 1, 1, 0, 0],
+    [0, 0, 1, 0, 0],
+  ])
+); // 5
 
-console.log(biggestIsland_DFS([
-  [0, 1, 1, 1, 0],
-  [0, 0, 0, 1, 1],
-  [0, 1, 1, 1, 0],
-  [0, 1, 1, 0, 0],
-  [0, 0, 0, 0, 0]
-])); // 10
+console.log(
+  biggestIsland_DFS([
+    [0, 1, 1, 1, 0],
+    [0, 0, 0, 1, 1],
+    [0, 1, 1, 1, 0],
+    [0, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0],
+  ])
+); // 10
 
-console.log(biggestIsland_DFS([
-  [1, 0, 1, 0, 1],
-  [0, 1, 0, 1, 0],
-  [1, 0, 1, 0, 1],
-  [0, 1, 0, 1, 0],
-  [1, 0, 1, 0, 1]
-])); // 1
+console.log(
+  biggestIsland_DFS([
+    [1, 0, 1, 0, 1],
+    [0, 1, 0, 1, 0],
+    [1, 0, 1, 0, 1],
+    [0, 1, 0, 1, 0],
+    [1, 0, 1, 0, 1],
+  ])
+); // 1

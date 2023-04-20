@@ -32,26 +32,50 @@ SOLUTION:
 4) If the 'slow' is 1, return true because the number is a happy number. Otherwise, return false.
 */
 
+// const isHappyNumber = (num) => {
+//   let slow = num;
+//   let fast = num;
+
+//   while (true) {
+//     slow = sumOfSquaresOfDigits(slow);
+//     fast = sumOfSquaresOfDigits(sumOfSquaresOfDigits(fast));
+//     if (slow === fast) break;
+//   }
+//   return slow === 1;
+// };
+
+// const sumOfSquaresOfDigits = (num) => {
+//   let sum = 0;
+//   while (num > 0) {
+//     const lastDigit = num % 10;
+//     sum += lastDigit * lastDigit;
+//     num = Math.floor(num / 10);
+//   }
+//   return sum;
+// };
+
 const isHappyNumber = (num) => {
   let slow = num;
   let fast = num;
 
   while (true) {
-    slow = sumOfSquaresOfDigits(slow);
-    fast = sumOfSquaresOfDigits(sumOfSquaresOfDigits(fast));
+    slow = nextNumber(slow);
+    fast = nextNumber(nextNumber(fast));
+
     if (slow === fast) break;
   }
+
   return slow === 1;
+
+
 };
 
-const sumOfSquaresOfDigits = (num) => {
-  let sum = 0;
-  while (num > 0) {
-    const lastDigit = num % 10;
-    sum += lastDigit * lastDigit;
-    num = Math.floor(num / 10);
-  }
-  return sum;
+const nextNumber = (num, result = 0) => {
+  if (num < 10) return num * num + result;
+
+  const digit = num % 10;
+  num = Math.floor(num / 10);
+  return nextNumber(num, digit * digit + result);
 };
 
 console.log(isHappyNumber(23)); // true

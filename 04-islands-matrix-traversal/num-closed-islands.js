@@ -8,79 +8,73 @@
  */
 
 
-const numClosedIslands = arr => {
-  let count = 0;
+const numClosedIslands = (arr) => {
+  let num = 0;
   for (let r = 0; r < arr.length; r++) {
     for (let c = 0; c < arr[0].length; c++) {
       if (arr[r][c] === 1) {
-        count += visitIsland(r, c, arr) === 0 ? 1 : 0;
+        num += traverseIsland(arr, r , c);
       }
     }
   }
-  return count;
+
+  return num;
 };
 
-// Clears the island.
-// Returns the number of cells touching the edge.
-// If the return value is 0, that means the island is closed.
-const visitIsland = (r, c, arr) => {
-  let touchingEdge = 0;
-  if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length) {
-    return 0; // out of bounds
-  }
-  if (arr[r][c] === 0) {
-    return 0; // already visited, or it is not an island space
-  }
+// Returns 1 if the island is closed
+// Returns 0 if the island is not closed
+const traverseIsland = (arr, r, c) => {
+  // If we encounter an out-of-bounds space, then the island is touching an edge!
+  if (arr?.[r]?.[c] === undefined) return 0;
 
-  // clear the island
+  if (arr[r][c] === 0) return 1; // water space
+
   arr[r][c] = 0;
 
-  if (r === 0 || r === arr.length - 1 || c === 0 || c === arr[0].length - 1) {
-    touchingEdge = 1; // touching the edge of the matrix
-  }
+  return (
+    traverseIsland(arr, r - 1, c) *
+    traverseIsland(arr, r + 1, c) *
+    traverseIsland(arr, r, c - 1) *
+    traverseIsland(arr, r, c + 1)
+  );
+};
 
-  return touchingEdge +
-    visitIsland(r - 1, c, arr) +
-    visitIsland(r + 1, c, arr) +
-    visitIsland(r, c - 1, arr) +
-    visitIsland(r, c + 1, arr);
-}
 
 /**
  * Another solution, where the visitIsland2 function returns true/false.
  */
-const numClosedIslands2 = arr => {
-  let count = 0;
-  for (let r = 0; r < arr.length; r++) {
-    for (let c = 0; c < arr[0].length; c++) {
-      if (arr[r][c] === 1) {
-        if (visitIsland2(r, c, arr)) count += 1;
-      }
-    }
-  }
-  return count;
-};
+// const numClosedIslands2 = arr => {
+//   let count = 0;
+//   for (let r = 0; r < arr.length; r++) {
+//     for (let c = 0; c < arr[0].length; c++) {
+//       if (arr[r][c] === 1) {
+//         if (visitIsland2(r, c, arr)) count += 1;
+//       }
+//     }
+//   }
+//   return count;
+// };
 
-const visitIsland2 = (r, c, arr) => {
-  if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length) {
-    return false; // out of bounds -> island must be touching an edge
-  }
-  if (arr[r][c] === 0) {
-    return true; // already visited, or it is not an island space
-  }
+// const visitIsland2 = (r, c, arr) => {
+//   if (r < 0 || r >= arr.length || c < 0 || c >= arr[0].length) {
+//     return false; // out of bounds -> island must be touching an edge
+//   }
+//   if (arr[r][c] === 0) {
+//     return true; // already visited, or it is not an island space
+//   }
 
-  arr[r][c] = 0; // clear the island
+//   arr[r][c] = 0; // clear the island
 
-  let isClosed = true;
-  isClosed &= visitIsland2(r - 1, c, arr); // neccessary to write this way
-  isClosed &= visitIsland2(r + 1, c, arr); // using 'bitwise AND assignment'
-  isClosed &= visitIsland2(r, c - 1, arr); // to prevent short-circuiting
-  isClosed &= visitIsland2(r, c + 1, arr);
+//   let isClosed = true;
+//   isClosed &= visitIsland2(r - 1, c, arr); // neccessary to write this way
+//   isClosed &= visitIsland2(r + 1, c, arr); // using 'bitwise AND assignment'
+//   isClosed &= visitIsland2(r, c - 1, arr); // to prevent short-circuiting
+//   isClosed &= visitIsland2(r, c + 1, arr);
 
-  return isClosed;
-}
+//   return isClosed;
+// }
 
-console.log(numClosedIslands2([
+console.log(numClosedIslands([
   [1, 1, 0, 0, 0],
   [0, 1, 0, 0, 0],
   [0, 0, 1, 1, 0],
@@ -88,7 +82,7 @@ console.log(numClosedIslands2([
   [0, 0, 0, 0, 0]
 ])); // 1
 
-console.log(numClosedIslands2([
+console.log(numClosedIslands([
   [0, 0, 0, 0, 0],
   [0, 1, 0, 0, 0],
   [0, 0, 1, 1, 0],
@@ -96,7 +90,7 @@ console.log(numClosedIslands2([
   [0, 0, 0, 0, 0]
 ])); // 2
 
-console.log(numClosedIslands2([
+console.log(numClosedIslands([
   [0, 1, 0, 1, 0],
   [0, 1, 0, 1, 0],
   [1, 1, 0, 1, 0],
@@ -104,7 +98,7 @@ console.log(numClosedIslands2([
   [0, 1, 0, 1, 1]
 ])); // 1
 
-console.log(numClosedIslands2([
+console.log(numClosedIslands([
   [0, 0, 0, 0, 0],
   [0, 1, 0, 1, 0],
   [0, 0, 1, 0, 0],

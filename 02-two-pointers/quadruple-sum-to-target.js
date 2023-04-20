@@ -9,38 +9,39 @@ to the target number.
 // 2) Use the same algorithm as triplet sum, with an extra pointer
 
 const quadrupleSumToTarget = (arr, target) => {
+  // sort array in non-decreasing order
   arr.sort((a, b) => a - b);
-  const result = [];
-  // pointers a, b, c, d
-  for (let a = 0; a < arr.length - 3; a++) {
-    for (let b = a + 1; b < arr.length - 2; b++) {
-      let c = b + 1;
-      let d = arr.length - 1;
 
-      while(c < d) {
-        const sum = arr[a] + arr[b] + arr[c] + arr[d];
-        if (sum === target) {
-          result.push([arr[a], arr[b], arr[c], arr[d]]);
-          c++;
-          while (c < d && arr[c] === arr[c - 1]) c++; // skip duplicates
-          d--;
-          while (c < d && arr[d] === arr[d + 1]) d--; // skip duplicates
-        }
-        if (sum < target) { // need a higher pair
-          c++;
-          while (c < d && arr[c] === arr[c - 1]) c++; // skip duplicates
-        }
-        if (sum > target) { // need a lower pair
-          d--;
-          while (c < d && arr[d] === arr[d + 1]) d--; // skip duplicates
+  const result = [];
+
+  for (let w = 0; w < arr.length - 3; w++) {
+    for (let x = w + 1; x < arr.length - 2; x++) {
+      let y = x + 1;
+      let z = arr.length - 1;
+
+      while (y < z) {
+        const sum = arr[w] + arr[x] + arr[y] + arr[z];
+        if (sum < target) {
+          y++;
+        } else if (sum > target) {
+          z--;
+        } else {
+          // found a sum equal to target
+          result.push([arr[w], arr[x], arr[y], arr[z]]);
+          y++;
+          while (y < z && arr[y] === arr[y - 1]) y++; // skip dupes
+          z--;
+          while (y < z && arr[z] === arr[z + 1]) z--; // skip dupes
         }
       }
+      while (arr[x + 1] === arr[x]) x++; // skip dupes
     }
+    while (arr[w + 1] === arr[w]) w++; // skip dupes
   }
   return result;
 }
 
-console.log(quadrupleSumToTarget([4, 1, 2, -1, 1, -3], 1));
+console.log(quadrupleSumToTarget([-3, -3, 4, 1, 2, -1, 1, -3], 1));
 // [-3, -1, 1, 4], [-3, 1, 1, 2]
 
 console.log(quadrupleSumToTarget([2, 0, -1, 1, -2, 2], 2));

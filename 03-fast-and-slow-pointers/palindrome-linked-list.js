@@ -1,4 +1,4 @@
-const {ListNode, LinkedList, arrToLinkedList} = require('./linked-list');
+const { ListNode, LinkedList, arrToLinkedList } = require("./linked-list");
 
 /***
 Given the head of a Singly LinkedList, write a method to check if
@@ -60,94 +60,78 @@ null <-- [1] <-- [2]     [3] --> [4] --> null
 null <-- [1] <-- [2] <-- [3] <-- [4]     null
 */
 
-const reverse = (head) => {
-  let prev = null;
-  let next = null;
-  while(head !== null) {
-    next = head.next;
-    head.next = prev;
-    prev = head;
-    head = next;
-  }
-  return prev;
-};
+// const reverse = (head) => {
+//   let prev = null;
+//   let next = null;
+//   while(head !== null) {
+//     next = head.next;
+//     head.next = prev;
+//     prev = head;
+//     head = next;
+//   }
+//   return prev;
+// };
 
 const isPalindrome = (ll) => {
-  // find middle node
-  let head = ll.head;
-  let slow = head;
-  let fast = head;
+  // 1. Find the middle node
+  let slow = ll.head;
+  let fast = ll.head;
+
   while (fast !== null && fast.next !== null) {
     slow = slow.next;
     fast = fast.next.next;
   }
-  // after the while loop, slow is the middle node
 
-  // reverse the second half
-  let headSecondHalf = reverse(slow);
+  // Now, `slow` is the middle node.
+  // 2. Reverse the second half of the list
+  let p1 = ll.head;
+  let p2 = reverse(slow);
+  let p2Copy = p2; // so that we can reverse the list again and un-mutate it
 
-  // additional pointer so we can revert the linked list to the original state
-  const copyHeadSecondHalf = headSecondHalf;
-
-  // check if we have a palindrome
-  let allValuesMatch = true;
-  while(head !== null && headSecondHalf !== null) {
-    if (head.value !== headSecondHalf.value) {
-      allValuesMatch = false;
-      break;
+  // 3. Check that correponding nodes have the same value until we reach the end of one of the lists
+  let palindrome = true;
+  while (p1 !== null && p2 !== null) {
+    if (p1.value !== p2.value) {
+      palindrome = false;
     }
-    head = head.next;
-    headSecondHalf = headSecondHalf.next;
+    p1 = p1.next;
+    p2 = p2.next;
   }
 
-  reverse(copyHeadSecondHalf); // revert second half
+  // 4. Restore the linked list
+  reverse(p2Copy);
 
-  return allValuesMatch;
+  return palindrome;
 };
 
-/*** Reverse a Linked List ***/
-const llEven = arrToLinkedList([1, 2, 3, 4, 5, 6]);
-// llEven.log();
-const llEvenReverse = new LinkedList(reverse(llEven.head));
-// llEvenReverse.log();
+const reverse = (head) => {
+  let prev = null;
+  let curr = head;
 
-const llSingle = arrToLinkedList([1]);
-// llSingle.log();
-const llSingleReverse = new LinkedList(reverse(llSingle.head));
-// llSingleReverse.log();
+  while (curr !== null) {
+    const nxt = curr.next;
+    curr.next = prev;
+    prev = curr;
+    curr = nxt;
+  }
 
-/*** Reverse and revert a Linked List ***/
-let head = new ListNode('a');
-head.next = new ListNode('b');
-head.next.next = new ListNode('c');
-head.next.next.next = new ListNode('d');
-head.next.next.next.next = new ListNode('e');
-head.log(); // [a] -> [b] -> [c] -> [d] -> [e] -> null
-head = reverse(head);
-head.log(); // [e] -> [d] -> [c] -> [b] -> [a] -> null
-head = reverse(head);
-head.log(); // [a] -> [b] -> [c] -> [d] -> [e] -> null
+  return prev;
+};
 
-let newHead = reverse(head.next.next);
-head.log();    // [a] -> [b] -> [c] -> null
-newHead.log(); // [e] -> [d] -> [c] -> null
-newHead = reverse(newHead);
-console.log(newHead.value); // 'c'
-head.log(); // [a] -> [b] -> [c] -> [d] -> [e] -> null
 
-/*** Check if a Linked List is a palindrome ***/
+
 const palindromes = [
   arrToLinkedList([1, 2, 3, 4, 5, 4, 3, 2, 1]),
   arrToLinkedList([1, 2, 3, 4, 4, 3, 2, 1]),
   arrToLinkedList([1, 1]),
-  arrToLinkedList([1])
+  arrToLinkedList([1]),
 ];
 
 const notPalindromes = [
   arrToLinkedList([1, 2, 3, 2]),
   arrToLinkedList([1, 2, 3, 4, 4, 3, 2, 1, 1]),
-  arrToLinkedList([1, 0])
-]
+  arrToLinkedList([1, 0]),
+];
 
-palindromes.forEach(e => console.log(isPalindrome(e))); // true, true, true, true
-notPalindromes.forEach(e => console.log(isPalindrome(e))); // false, false, false
+palindromes.forEach((e) => console.log(isPalindrome(e))); // true, true, true, true
+notPalindromes.forEach((e) => console.log(isPalindrome(e))); // false, false, false
